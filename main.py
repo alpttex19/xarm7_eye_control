@@ -15,6 +15,8 @@ except ImportError:
     print("pyrealsense2 module not found. using webcam.")
     rs = None
 
+camera_id = 4  # 默认摄像头ID，可能需要根据实际情况调整
+
 
 class ControlMode(Enum):
     MANUAL = "manual"
@@ -47,7 +49,7 @@ class EyeGazeTracker:
             self.config = rs.config()
             self.config.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30)
         else:
-            self.webcam = cv2.VideoCapture(4)
+            self.webcam = cv2.VideoCapture(camera_id)
 
         # 初始化注视追踪
         self.gaze = GazeTracking()
