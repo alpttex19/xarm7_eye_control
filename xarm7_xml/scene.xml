@@ -1,0 +1,66 @@
+<mujoco model="xarm7 scene">
+	<!-- 优化求解器设置，提升稳定抓取效果 -->
+	<compiler angle="radian" autolimits="true"/>
+	<option gravity="0 0 -9.81" iterations="100" solver="Newton" integrator="implicit" timestep="0.001"/>
+	<include file="xarm7.xml"/>
+	<statistic center="0.2 0 0.4" extent=".65"/>
+	<visual>
+		<headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+		<rgba haze="0.15 0.25 0.35 1"/>
+		<global azimuth="150" elevation="-20"/>
+	</visual>
+	<asset>
+		<!-- 原地面纹理 -->
+		<texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+		<texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+		<material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+		<!-- 新增材质 -->
+		<material name="mat_table" rgba="0.80 0.80 0.82 1"/>
+		<material name="mat_leg" rgba="0.30 0.30 0.35 1"/>
+		<material name="mat_rack" rgba="0.40 0.40 0.40 1"/>
+		<!-- 物体材质 -->
+		<material name="mat_red" rgba="0.90 0.20 0.20 1"/>
+		<material name="mat_blue" rgba="0.20 0.50 0.90 1"/>
+		<material name="mat_yellow" rgba="0.95 0.70 0.20 1"/>
+		<!-- 七巧板架 mesh -->
+		<mesh name="tangram_rack" file="meshes_tangram_rack.obj"/>
+	</asset>
+	<worldbody>
+		<!-- 原有地面和光源 -->
+		<light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+		<geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+		<!-- <geom type="cylinder" size=".06 .06" pos="0 0 .06" rgba="1 1 1 1"/> -->
+		<!-- 桌子 -->
+		<body name="table" pos="0.8 0 0.35">
+			<geom type="box" size="0.025 0.025 0.35" pos="0.395 0.295 0" material="mat_leg"/>
+			<geom type="box" size="0.025 0.025 0.35" pos="0.39 -0.295 0" material="mat_leg"/>
+			<geom type="box" size="0.025 0.025 0.35" pos="-0.395 0.295 0" material="mat_leg"/>
+			<geom type="box" size="0.025 0.025 0.35" pos="-0.395 -0.295 0" material="mat_leg"/>
+			<geom name="table_top" type="box" size="0.7 0.5 0.025" pos="0 0 0.375" material="mat_table" conaffinity="1" condim="3" contype="0" margin="0.001"/>
+		</body>
+		<!-- xArm7 底座 -->
+		<body name="xarm_base_plate" pos="0.4 0 0.788">
+			<geom type="cylinder" size="0.06 0.06" rgba="1 1 1 1"/>
+		</body>
+		<!-- 七巧板容纳架 -->
+		<body name="tangram_rack" pos="0.6 0 0.73">
+			<geom type="mesh" mesh="tangram_rack" material="mat_rack" contype="0" conaffinity="0" friction="1 0.05 0.01" solref="0.001 1" solimp="0.97 0.99 0.002" condim="3"/>
+		</body>
+		<!-- 物体 - 直接定义在顶层 -->
+		<body name="tg_L1" pos="0.8 0.4 0.78">
+			<inertial pos="0 0 0" mass="0.01" diaginertia="0.0001 0.0001 0.0001" />
+			<joint type="free" damping="0.01"/>
+			<geom type="box" size="0.02 0.02 0.03" material="mat_red" contype="1" conaffinity="1" friction="0.8 0.5 0.5" condim="3" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+		</body>
+		<body name="tg_L2" pos="0.8 0.0 0.78">
+			<inertial pos="0 0 0" mass="0.01" diaginertia="0.0001 0.0001 0.0001"/>
+			<joint type="free" damping="0.01"/>
+			<geom type="box" size="0.02 0.02 0.03" material="mat_blue" contype="1" conaffinity="1" friction="0.8 0.5 0.5" condim="3" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+		</body>
+		<body name="tg_M" pos="0.8 -0.4 0.78">
+			<inertial pos="0 0 0" mass="0.01" diaginertia="0.0001 0.0001 0.0001"/>
+			<joint type="free" damping="0.01"/>
+			<geom type="box" size="0.02 0.02 0.03" material="mat_yellow" contype="1" conaffinity="1" friction="0.8 0.5 0.5" condim="3" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+		</body>
+	</worldbody>
+</mujoco>

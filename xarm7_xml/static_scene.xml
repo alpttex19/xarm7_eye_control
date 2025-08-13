@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="static_scene">
+
+  <compiler angle="radian" autolimits="true" meshdir="."/>
+  <option integrator="implicitfast" timestep="0.002" gravity="0 0 -9.81"/>
+
+  <asset>
+    <!-- 场景用材质 -->
+    <texture name="sky" builtin="gradient" width="256" height="256"
+             rgb1="0.9 0.9 1.0" rgb2="0.2 0.3 0.4" type="skybox"/>
+    <material name="mat_floor" rgba="0.93 0.93 0.93 1"/>
+    <material name="mat_table" rgba="0.80 0.80 0.82 1"/>
+    <material name="mat_leg"   rgba="0.30 0.30 0.35 1"/>
+    <material name="mat_rack"  rgba="0.40 0.40 0.40 1"/>
+
+    <!-- 容纳架 网格 -->
+    <mesh name="tangram_rack" file="meshes_tangram_rack.obj"/>
+  </asset>
+
+  <default>
+    <geom solref="0.006 1" solimp="0.9 0.95 0.002" friction="1.2 0.2 0.02"/>
+  </default>
+
+  <worldbody>
+    <!-- 地面 -->
+    <geom name="floor" type="plane" size="5 5 0.1" material="mat_floor"/>
+
+    <!-- 桌子 -->
+    <body name="table" pos="0.8 0 0.35">
+      <geom type="box" size="0.025 0.025 0.35" pos="0.395 0.295 0" material="mat_leg"/>
+      <geom type="box" size="0.025 0.025 0.35" pos="0.39 -0.295 0"  material="mat_leg"/>
+      <geom type="box" size="0.025 0.025 0.35" pos="-0.395 0.295 0" material="mat_leg"/>
+      <geom type="box" size="0.025 0.025 0.35" pos="-0.395 -0.295 0" material="mat_leg"/>
+      <geom name="table_top" type="box" size="0.7 0.5 0.025"
+            pos="0 0 0.375" material="mat_table"
+            contype="1" conaffinity="1"
+            friction="1 0.05 0.01"
+            solref="0.001 1"
+            solimp="0.97 0.99 0.002"
+            condim="6"/>
+    </body>
+
+    <!-- xArm7 底座 -->
+    <body name="xarm_base_plate" pos="0.4 0 0.788">
+      <geom type="box" size="0.061 0.061 0.051"
+            material="mat_leg" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- 七巧板容纳架 -->
+    <body name="tangram_rack" pos="0.8 0 0.73">
+      <geom type="mesh" mesh="tangram_rack"
+            material="mat_rack"
+            contype="1" conaffinity="1"
+            friction="1 0.05 0.01"
+            solref="0.001 1"
+            solimp="0.97 0.99 0.002"
+            condim="6"/>
+    </body>
+
+    <light name="light_main" pos="1.2 0 2.0" dir="0 0 -1"/>
+    <camera name="front" pos="1.6 0 1.45" quat="0.56 0.43 0.43 0.56"/>
+  </worldbody>
+
+</mujoco>

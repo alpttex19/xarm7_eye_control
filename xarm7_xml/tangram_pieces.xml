@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="tangram_pieces">
+
+  <!-- Compiler & Option，与 xArm7 保持一致 -->
+  <compiler angle="radian" autolimits="true"/>
+  <option integrator="implicitfast" timestep="0.002" gravity="0 0 -9.81"/>
+
+  <!-- 资产定义 -->
+  <asset>
+    <!-- 材质 -->
+    <material name="mat_red" rgba="0.90 0.20 0.20 1"/>
+    <material name="mat_blue" rgba="0.20 0.50 0.90 1"/>
+    <material name="mat_yellow" rgba="0.95 0.70 0.20 1"/>
+  </asset>
+
+  <!-- 默认属性：统一到 tg_piece class -->
+  <default>
+    <default class="tg_piece">
+      <geom type="box" contype="1" conaffinity="1" 
+            friction="0.8 0.1 0.1" condim="6"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <joint type="free" damping="0.1"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <body name="tg_L1" pos="0.4 0.2 0.78" childclass="tg_piece">
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+      <joint type="free" damping="0.1"/>
+      <geom size="0.02 0.02 0.02" material="mat_red"/>
+    </body>
+
+    <body name="tg_L2" pos="0.6 0.2 0.78" childclass="tg_piece">
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+      <joint type="free" damping="0.1"/>
+      <geom size="0.02 0.02 0.02" material="mat_blue"/>
+    </body>
+
+    <body name="tg_M"  pos="0.8 0.2 0.78" childclass="tg_piece">
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.0001 0.0001 0.0001"/>
+      <joint type="free" damping="0.1"/>
+      <geom size="0.02 0.02 0.02" material="mat_yellow"/>
+    </body>
+  </worldbody>
+
+</mujoco>

@@ -1,0 +1,5 @@
+name: xarm7_control
+dependencies:
+- numpy == 1.16.1
+- opencv == 3.4.*
+- dlib == 19.17.*
